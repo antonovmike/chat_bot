@@ -16,6 +16,20 @@ def create_table():
     )
     """)
 
+    c.execute("""
+    CREATE TABLE IF NOT EXISTS report (
+        id INTEGER PRIMARY KEY AUTOINCREMENT,
+        user_message TEXT,
+        gpt_message TEXT,
+        gpt_response_time TEXT,
+        message_date_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
+    )
+    """)
+    # user_message
+    # neural_network_message
+    # neural_network_response_time
+    # message_creation_date_and_time
+
     conn.commit()
     conn.close()
 
