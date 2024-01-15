@@ -11,7 +11,8 @@ def create_table():
         telegram_id TEXT,
         username TEXT,
         first_name TEXT,
-        last_name TEXT
+        last_name TEXT,
+        registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
     )
     """)
 
@@ -19,11 +20,11 @@ def create_table():
     conn.close()
 
 
-def add_user(telegram_id, username, first_name, last_name):
+def add_user(telegram_id, username, first_name, last_name, registration_date=None):
     conn = sqlite3.connect('database.sqlite')
     c = conn.cursor()
 
-    c.execute("INSERT INTO users VALUES (NULL, ?, ?, ?, ?)", (telegram_id, username, first_name, last_name))
+    c.execute("INSERT INTO users VALUES (NULL, ?, ?, ?, ?, ?)", (telegram_id, username, first_name, last_name, registration_date))
 
     conn.commit()
     conn.close()
