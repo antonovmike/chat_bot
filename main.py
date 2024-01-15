@@ -3,6 +3,8 @@ import os
 from aiogram import Bot, Dispatcher, Router, types
 from aiogram.filters import CommandStart
 
+from openai import OpenAI
+
 from dotenv import load_dotenv
 
 
@@ -11,6 +13,22 @@ TOKEN = os.getenv('TOKEN')
 bot = Bot(TOKEN)
 dp = Dispatcher(bot=bot)
 router = Router()
+client = OpenAI(api_key=os.getenv('GPT'))
+
+
+response = client.chat.completions.create(
+    model="gpt-3.5-turbo",
+    messages=[
+        {
+            "role": "system",
+            "content": "You are a helpful assistant."
+        },
+        {
+            "role": "user",
+            "content": "Who won the world series in 2020?"
+        },
+    ]
+)
 
 
 @dp.message(CommandStart())
