@@ -1,6 +1,7 @@
 import asyncio
 import datetime
 import os
+import re
 
 from aiogram import Bot, Dispatcher, Router, types
 from aiogram.filters import CommandStart
@@ -64,6 +65,16 @@ async def echo(message: types.Message):
     answer = response.choices[0].message.content.strip()
     gpt_response_time = str(time_stop - time_start)
     message_date_time = datetime.datetime.now()
+
+    # Search for date in the answer
+    # date_pattern = r'\b\d{1,2}\s*(january|february|march|april|may|june|july|august|september|october|november|december)\b'
+    date_pattern = r'\b\d{1,2}\s*(январь|февраль|март|апрель|мая|июнь|июль|август|сентябрь|октябрь|ноябрь|декабрь)\b'
+    date_match = re.search(date_pattern, answer, re.IGNORECASE)
+    if date_match:
+        date_user = date_match.group(0)
+        print(f"Date found: {date_user}")
+    else:
+        print("No date found")
 
     new_report = Report(user_message=message.text,
                         gpt_message=answer,
