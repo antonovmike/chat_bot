@@ -30,6 +30,8 @@ response = client.chat.completions.create(
     ]
 )
 
+print(response.choices)
+
 
 @dp.message(CommandStart())
 async def command_start_handler(message: types.Message) -> None:
