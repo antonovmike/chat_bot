@@ -33,6 +33,14 @@ response = client.chat.completions.create(
 print(response.choices)
 
 
+@dp.message()
+async def echo(message: types.Message):
+    # Send message to ChatGPT
+    # Get message from ChatGPT
+    # Send ChatGPT message to Telegram
+    await message.answer(message.text)
+
+
 @dp.message(CommandStart())
 async def command_start_handler(message: types.Message) -> None:
     await message.answer(f'Hello {message.from_user.full_name}')
