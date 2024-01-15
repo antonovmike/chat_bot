@@ -52,6 +52,7 @@ print(response.choices)
 
 @dp.message()
 async def echo(message: types.Message):
+    time_start = datetime.datetime.now()
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=[
@@ -65,9 +66,10 @@ async def echo(message: types.Message):
             },
         ]
     )
+    time_stop = datetime.datetime.now()
     # Get message from ChatGPT
     answer = response.choices[0].message.content.strip()
-    gpt_response_time = "EMPTY"
+    gpt_response_time = str(time_stop - time_start)
     message_date_time = datetime.datetime.now()
     db.create_report(message.text, answer, gpt_response_time, message_date_time)
     # Send ChatGPT message to Telegram
