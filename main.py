@@ -18,6 +18,7 @@ bot = Bot(TOKEN)
 dp = Dispatcher(bot=bot)
 router = Router()
 client = OpenAI(api_key=os.getenv('GPT'))
+history = []
 
 
 @dp.message(CommandStart())
@@ -52,19 +53,21 @@ print(response.choices)
 
 @dp.message()
 async def echo(message: types.Message):
+    history.append({"role": "user", "content": message.text})
     time_start = datetime.datetime.now()
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
-        messages=[
-            {
-                "role": "system",
-                "content": "You are a helpful assistant."
-            },
-            {
-                "role": "user",
-                "content": message.text
-            },
-        ]
+        messages=history + [{"role": "system", "content": "You are a helpful assistant."}]
+        # messages=[
+        #     {
+        #         "role": "system",
+        #         "content": "You are a helpful assistant."
+        #     },
+        #     {
+        #         "role": "user",
+        #         "content": message.text
+        #     },
+        # ]
     )
     time_stop = datetime.datetime.now()
     # Get message from ChatGPT
@@ -87,5 +90,4 @@ async def main():
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
-    # db.create_table()
     asyncio.run(main())
