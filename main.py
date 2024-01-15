@@ -16,6 +16,12 @@ router = Router()
 client = OpenAI(api_key=os.getenv('GPT'))
 
 
+@dp.message(CommandStart())
+async def command_start_handler(message: types.Message) -> None:
+    await message.answer_sticker('CAACAgIAAxkBAAIUSWWalI3UK4cUW2s25m49M2WlW6SZAAI7AQACijc4AAGSEIzViMEnBDQE')
+    await message.answer(f'Hello {message.from_user.full_name}')
+
+
 response = client.chat.completions.create(
     model="gpt-3.5-turbo",
     messages=[
@@ -52,12 +58,6 @@ async def echo(message: types.Message):
     answer = response.choices[0].message.content.strip()
     # Send ChatGPT message to Telegram
     await message.answer(answer)
-
-
-@dp.message(CommandStart())
-async def command_start_handler(message: types.Message) -> None:
-    await message.answer_sticker('CAACAgIAAxkBAAIUSWWalI3UK4cUW2s25m49M2WlW6SZAAI7AQACijc4AAGSEIzViMEnBDQE')
-    await message.answer(f'Hello {message.from_user.full_name}')
 
 
 async def main():
