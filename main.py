@@ -67,6 +67,9 @@ async def echo(message: types.Message):
     )
     # Get message from ChatGPT
     answer = response.choices[0].message.content.strip()
+    gpt_response_time = "EMPTY"
+    message_date_time = datetime.datetime.now()
+    db.create_report(message.text, answer, gpt_response_time, message_date_time)
     # Send ChatGPT message to Telegram
     await message.answer(answer)
 

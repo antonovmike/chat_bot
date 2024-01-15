@@ -42,3 +42,14 @@ def add_user(telegram_id, username, first_name, last_name, registration_date=Non
 
     conn.commit()
     conn.close()
+
+
+def create_report(user_message, gpt_message, gpt_response_time, message_date_time):
+    conn = sqlite3.connect('database.sqlite')
+    c = conn.cursor()
+
+    c.execute("INSERT INTO report VALUES (NULL, ?, ?, ?, ?)",
+              (user_message, gpt_message, gpt_response_time, message_date_time))
+
+    conn.commit()
+    conn.close()
