@@ -1,3 +1,5 @@
+import asyncio
+import datetime
 import os
 
 from aiogram import Bot, Dispatcher, Router, types
@@ -6,6 +8,8 @@ from aiogram.filters import CommandStart
 from openai import OpenAI
 
 from dotenv import load_dotenv
+
+import db
 
 
 load_dotenv()
@@ -20,6 +24,12 @@ client = OpenAI(api_key=os.getenv('GPT'))
 async def command_start_handler(message: types.Message) -> None:
     await message.answer_sticker('CAACAgIAAxkBAAIUSWWalI3UK4cUW2s25m49M2WlW6SZAAI7AQACijc4AAGSEIzViMEnBDQE')
     await message.answer(f'Hello {message.from_user.full_name}')
+    db.add_user(
+        telegram_id=str(message.from_user.id),
+        username=message.from_user.username,
+        first_name=message.from_user.first_name,
+        last_name=message.from_user.last_name,
+    )
 
 
 response = client.chat.completions.create(
@@ -65,5 +75,5 @@ async def main():
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
-    import asyncio
+    db.create_table()
     asyncio.run(main())
