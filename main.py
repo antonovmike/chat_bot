@@ -9,7 +9,7 @@ from openai import OpenAI
 
 from dotenv import load_dotenv
 
-import db
+from db import User, Report, session
 
 
 load_dotenv()
@@ -24,13 +24,13 @@ client = OpenAI(api_key=os.getenv('GPT'))
 async def command_start_handler(message: types.Message) -> None:
     await message.answer_sticker('CAACAgIAAxkBAAIUSWWalI3UK4cUW2s25m49M2WlW6SZAAI7AQACijc4AAGSEIzViMEnBDQE')
     await message.answer(f'Hello {message.from_user.full_name}')
-    db.add_user(
-        telegram_id=str(message.from_user.id),
-        username=message.from_user.username,
-        first_name=message.from_user.first_name,
-        last_name=message.from_user.last_name,
-        registration_date=datetime.datetime.now()
-    )
+    new_user = User(telegram_id=str(message.from_user.id),
+                    username=message.from_user.username,
+                    first_name=message.from_user.first_name,
+                    last_name=message.from_user.last_name,
+                    registration_date=datetime.datetime.now())
+    session.add(new_user)
+    session.commit()
 
 
 response = client.chat.completions.create(
@@ -71,7 +71,13 @@ async def echo(message: types.Message):
     answer = response.choices[0].message.content.strip()
     gpt_response_time = str(time_stop - time_start)
     message_date_time = datetime.datetime.now()
-    db.create_report(message.text, answer, gpt_response_time, message_date_time)
+
+    new_report = Report(user_message=message.text,
+                        gpt_message=answer,
+                        gpt_response_time=gpt_response_time,
+                        message_date_time=message_date_time)
+    session.add(new_report)
+    session.commit()
     # Send ChatGPT message to Telegram
     await message.answer(answer)
 
@@ -81,5 +87,5 @@ async def main():
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
-    db.create_table()
+    # db.create_table()
     asyncio.run(main())

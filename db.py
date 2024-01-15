@@ -1,55 +1,32 @@
-import sqlite3
+from sqlalchemy import Column, Integer, String, DateTime, create_engine, func
+from sqlalchemy.ext.declarative import declarative_base
+from sqlalchemy.orm import sessionmaker
+
+engine = create_engine('sqlite:///database.sqlite')
+Session = sessionmaker(bind=engine)
+session = Session()
+base = declarative_base()
 
 
-def create_table():
-    conn = sqlite3.connect('database.sqlite')
-    c = conn.cursor()
+class User(base):
+    __tablename__ = 'users'
 
-    c.execute("""
-    CREATE TABLE IF NOT EXISTS users (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        telegram_id TEXT,
-        username TEXT,
-        first_name TEXT,
-        last_name TEXT,
-        registration_date TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )
-    """)
-
-    c.execute("""
-    CREATE TABLE IF NOT EXISTS report (
-        id INTEGER PRIMARY KEY AUTOINCREMENT,
-        user_message TEXT,
-        gpt_message TEXT,
-        gpt_response_time TEXT,
-        message_date_time TIMESTAMP DEFAULT CURRENT_TIMESTAMP
-    )
-    """)
-    # user_message
-    # neural_network_message
-    # neural_network_response_time
-    # message_creation_date_and_time
-
-    conn.commit()
-    conn.close()
+    id = Column(Integer, primary_key=True)
+    telegram_id = Column(String)
+    username = Column(String)
+    first_name = Column(String)
+    last_name = Column(String)
+    registration_date = Column(DateTime, default=func.now())
 
 
-def add_user(telegram_id, username, first_name, last_name, registration_date=None):
-    conn = sqlite3.connect('database.sqlite')
-    c = conn.cursor()
+class Report(base):
+    __tablename__ = 'report'
 
-    c.execute("INSERT INTO users VALUES (NULL, ?, ?, ?, ?, ?)", (telegram_id, username, first_name, last_name, registration_date))
+    id = Column(Integer, primary_key=True)
+    user_message = Column(String)
+    gpt_message = Column(String)
+    gpt_response_time = Column(String)
+    message_date_time = Column(DateTime, default=func.now())
 
-    conn.commit()
-    conn.close()
 
-
-def create_report(user_message, gpt_message, gpt_response_time, message_date_time):
-    conn = sqlite3.connect('database.sqlite')
-    c = conn.cursor()
-
-    c.execute("INSERT INTO report VALUES (NULL, ?, ?, ?, ?)",
-              (user_message, gpt_message, gpt_response_time, message_date_time))
-
-    conn.commit()
-    conn.close()
+base.metadata.create_all(engine)
