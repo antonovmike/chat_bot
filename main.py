@@ -1,7 +1,7 @@
 import asyncio
 import datetime
 import os
-import re
+import dateparser
 
 from aiogram import Bot, Dispatcher, Router, types
 from aiogram.filters import CommandStart
@@ -66,15 +66,15 @@ async def echo(message: types.Message):
     gpt_response_time = str(time_stop - time_start)
     message_date_time = datetime.datetime.now()
 
-    # Search for date in the answer
-    # date_pattern = r'\b\d{1,2}\s*(january|february|march|april|may|june|july|august|september|october|november|december)\b'
-    date_pattern = r'\b\d{1,2}\s*(январь|февраль|март|апрель|мая|июнь|июль|август|сентябрь|октябрь|ноябрь|декабрь)\b'
-    date_match = re.search(date_pattern, answer, re.IGNORECASE)
-    if date_match:
-        date_user = date_match.group(0)
-        print(f"Date found: {date_user}")
-    else:
-        print("No date found")
+    # New prompt
+    second_message = {"role": "user", "content": f"Find a date in this text and send me only the date you found '{message.text}'"}
+    history.append(second_message)
+    response_2 = client.chat.completions.create(
+        model="gpt-3.5-turbo",
+        messages=history + [{"role": "system", "content": "You are a helpful assistant."}]
+    )
+    answer_to_second_request = response_2.choices[0].message.content.strip()
+    print(f"Answer to the second request: {answer_to_second_request}")
 
     new_report = Report(user_message=message.text,
                         gpt_message=answer,
