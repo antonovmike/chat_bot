@@ -66,15 +66,18 @@ async def echo(message: types.Message):
     gpt_response_time = str(time_stop - time_start)
     message_date_time = datetime.datetime.now()
 
-    # New prompt
-    second_message = {"role": "user", "content": f"Find a date in this text and send me only the date you found '{message.text}'"}
+    # Additional prompt
+    second_message = {
+        "role": "user",
+        "content": f"Find a date in this text and send it back in json format with field \"date_user\" '{message.text}'"
+    }
     history.append(second_message)
     response_2 = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=history + [{"role": "system", "content": "You are a helpful assistant."}]
     )
     answer_to_second_request = response_2.choices[0].message.content.strip()
-    print(f"Answer to the second request: {answer_to_second_request}")
+    print(answer_to_second_request)
 
     new_report = Report(user_message=message.text,
                         gpt_message=answer,
