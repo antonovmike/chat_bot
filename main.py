@@ -58,16 +58,6 @@ async def echo(message: types.Message):
     response = client.chat.completions.create(
         model="gpt-3.5-turbo",
         messages=history + [{"role": "system", "content": "You are a helpful assistant."}]
-        # messages=[
-        #     {
-        #         "role": "system",
-        #         "content": "You are a helpful assistant."
-        #     },
-        #     {
-        #         "role": "user",
-        #         "content": message.text
-        #     },
-        # ]
     )
     time_stop = datetime.datetime.now()
     # Get message from ChatGPT

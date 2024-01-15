@@ -2,7 +2,8 @@ from sqlalchemy import Column, Integer, String, DateTime, create_engine, func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-engine = create_engine('sqlite:///database.sqlite')
+# engine = create_engine('sqlite:///database.sqlite')
+engine = create_engine('postgresql://postgres:123@localhost/test_bot')
 Session = sessionmaker(bind=engine)
 session = Session()
 base = declarative_base()
