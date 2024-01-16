@@ -1,7 +1,6 @@
 import asyncio
 import datetime
 import os
-import dateparser
 
 from aiogram import Bot, Dispatcher, Router, types
 from aiogram.filters import CommandStart

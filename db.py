@@ -1,8 +1,13 @@
+import os
+
 from sqlalchemy import Column, Integer, String, DateTime, create_engine, func
 from sqlalchemy.ext.declarative import declarative_base
 from sqlalchemy.orm import sessionmaker
 
-engine = create_engine('postgresql://postgres:123@localhost/test_bot')
+from dotenv import load_dotenv
+
+load_dotenv()
+engine = create_engine(os.getenv('DATA_BASE'))
 Session = sessionmaker(bind=engine)
 session = Session()
 base = declarative_base()
