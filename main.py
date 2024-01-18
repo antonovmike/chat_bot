@@ -1,13 +1,14 @@
 import asyncio
 import datetime
+import logging
 import os
+import sys
 
 from aiogram import Bot, Dispatcher, Router, types
 from aiogram.filters import CommandStart
 
-from openai import OpenAI
-
 from dotenv import load_dotenv
+from openai import OpenAI
 
 from db import User, Report, session
 
@@ -93,4 +94,8 @@ async def main():
     await dp.start_polling(bot)
 
 if __name__ == "__main__":
-    asyncio.run(main())
+    logging.basicConfig(level=logging.INFO, stream=sys.stdout)
+    try:
+        asyncio.run(main())
+    except KeyboardInterrupt:
+        print("Exit")
