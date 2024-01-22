@@ -8,19 +8,19 @@ Chat Bot is a Python project that allows you to create and run a Telegram bot us
 
 To install and run this project, you need to have Python 3.7 or higher and pip installed on your system. Then follow these steps:
 
-•  Clone this repository to your local machine.
+• Clone this repository to your local machine.
 
-•  Create and activate a virtual environment.
+• Create and activate a virtual environment.
 
-•  Install the required dependencies using `pip install -r requirements.txt`.
+• Install the required dependencies using `pip install -r requirements.txt`.
 
-•  Create a Telegram bot using BotFather and get your API token.
+• Create a Telegram bot using BotFather and get your API token.
 
-•  Create a `.env` file in the root directory of the project and add your API token as `TOKEN=<your_token>`.
+• Create a `.env` file in the root directory of the project and add your API token as `TOKEN=<your_token>`.
 
-•  Add your ChatGPT key to the `.env` file as 'GPT=<your_key>'.
+• Add your ChatGPT key to the `.env` file as 'GPT=<your_key>'.
 
-•  Run the `main.py` file using `python3 main.py`.
+• Run the `main.py` file using `python3 main.py`.
 
 
 ## Database Setup
@@ -78,7 +78,35 @@ poetry install
 ```
 to install all the dependencies from the `pyproject.toml` file.
 
-6. Migrate the database to the latest version of PostgreSQL. 
+6. Migrate the database to the latest version of PostgreSQL. Follow these steps:
+
+Install the latest version of PostgreSQL on your machine or use a cloud service provider. 
+Install the `pg_dump` and `pg_restore` tools, which are used to export and import the database data.
+Export the data from the current database using the `pg_dump` tool. You can use the following command:
+```bash
+pg_dump -U postgres -W -F custom -d chat_bot -f chat_bot.dump
+```
+This command will create a file called `chat_bot.dump` that contains the data from the chat_bot database in a custom format.
+
+Import the data into the new database using the `pg_restore` tool. You can use the following command:
+```bash
+pg_restore -U postgres -W -F custom -d chat_bot -c chat_bot.dump
+```
+This command will create a new database called `chat_bot` with the same structure and data as the old one, but using the latest version of PostgreSQL. The `-c` option will drop any existing objects in the new database before restoring them.
+
+Verify that the migration was successful by checking the version and the data of the new database. You can use the following commands:
+```bash
+psql -U postgres -W -d chat_bot -c "SELECT version();"
+```
+This command will show you the version of the PostgreSQL server that the new database is running on.
+```bash
+psql -U postgres -W -d chat_bot -c "\dt"
+```
+This command will show you the tables in the new database.
+```bash
+psql -U postgres -W -d chat_bot -c "SELECT * FROM users;"
+```
+This command will show you the data in the users table. You can replace users with any other table name to see the data in that table.
 
 7. To connect to the database from your code, you need to provide the connection details and credentials in the `.env` file. 
 Add your DATA_BASE address to the `.env` file as `DATA_BASE=DATA_BASE=postgresql://<db_name>:<db_passward>@localhost/test_bot`.
