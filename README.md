@@ -26,11 +26,9 @@ To install and run this project, you need to have Python 3.7 or higher and pip i
 ## Database Setup
 This project uses PostgreSQL 14.10 as the database for storing and retrieving chat data. The database name is "test_bot" and it consists of the following tables:
 
-users
-id | telegram_id | username | first_name | last_name | registration_date
+Table `users` contains the information of the users who interact with the chat bot: id, telegram_id, username, first_name, last_name, registration_date.
 
-report
-id | user_message | gpt_message | gpt_response_time | message_date_time
+Table `report` contains the information of the user's prompts and neural network's responses such as: id, user_message, gpt_message, gpt_response_time, message_date_time.
 
 To set up the database, you need to follow these steps:
 
@@ -74,14 +72,16 @@ INSERT INTO report VALUES (NULL, ?, ?, ?, ?), ("some user message", "some gpt re
 ```bash
 pip install -r requirements.txt
 ```
-to install dependencies from the `requirements.txt`  file. Or
+to install dependencies from the `requirements.txt`  file. Or you can use 
 ```bash
 poetry install
 ```
 to install all the dependencies from the `pyproject.toml` file.
 
-6. To connect to the database from your code, you need to provide the connection details and credentials in the `.env` file. 
-Add your DATA_BASE address to the `.env` file as 'DATA_BASE=DATA_BASE=postgresql://<db_name>:<db_passward>@localhost/test_bot'.
+6. Migrate the database to the latest version of PostgreSQL. 
+
+7. To connect to the database from your code, you need to provide the connection details and credentials in the `.env` file. 
+Add your DATA_BASE address to the `.env` file as `DATA_BASE=DATA_BASE=postgresql://<db_name>:<db_passward>@localhost/test_bot`.
 
 ## Usage
 
