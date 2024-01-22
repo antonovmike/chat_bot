@@ -70,8 +70,17 @@ CREATE TABLE IF NOT EXISTS report (
 INSERT INTO users VALUES (NULL, ?, ?, ?, ?), ("100000000", "username", "first_name", "last_name", "2024-01-02 11:22:33.445566");
 INSERT INTO report VALUES (NULL, ?, ?, ?, ?), ("some user message", "some gpt response", "0:00:04.050607", "2024-01-02 12:34:56.778899");
 ```
+5. To install all the dependencies file you can use the following command: 
+```bash
+pip install -r requirements.txt
+```
+to install dependencies from the `requirements.txt`  file. Or
+```bash
+poetry install
+```
+to install all the dependencies from the `pyproject.toml` file.
 
-To connect to the database from your code, you need to provide the connection details and credentials in the `.env` file. 
+6. To connect to the database from your code, you need to provide the connection details and credentials in the `.env` file. 
 Add your DATA_BASE address to the `.env` file as 'DATA_BASE=DATA_BASE=postgresql://<db_name>:<db_passward>@localhost/test_bot'.
 
 ## Usage
