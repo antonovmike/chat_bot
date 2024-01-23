@@ -72,8 +72,9 @@ INSERT INTO report VALUES (NULL, ?, ?, ?, ?), ("some user message", "some gpt re
 ```bash
 pip install -r requirements.txt
 ```
-to install dependencies from the `requirements.txt`  file. Or you can use 
+to install dependencies from the `requirements.txt` file. Or you can use 
 ```bash
+pip install poetry
 poetry install
 ```
 to install all the dependencies from the `pyproject.toml` file.
